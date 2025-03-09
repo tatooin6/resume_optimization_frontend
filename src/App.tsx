@@ -1,15 +1,92 @@
 import { useState } from "react";
+import Button, { ButtonType } from "./components/atoms/Button";
+import { ThemeSwitcher } from "./components/atoms/ThemeSwitcher";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <>
-      <h1 className="text-3xl font-thin text-blue-600">Welcome</h1>
-      <button onClick={() => setCount((count) => count + 1)}>
-        count is {count}
-      </button>
-    </>
+    <div>
+      <ThemeSwitcher />
+      <div className="">
+        <div className="mb-6">
+          <h1 className="text-3xl font-sans font-thin text-text dark:text-secondary">
+            Welcome to the Dark Mode Demo
+          </h1>
+          <p className="mt-4 text-text dark:text-text-dark">
+            This is an example of text with the primary color in both light and
+            dark modes.
+          </p>
+          <p className="mt-4 text-accent dark:text-accent-dark">
+            This is an example of text with the accent color in both light and
+            dark modes.
+          </p>
+        </div>
+
+        <div className="mt-6">
+          <Button
+            action={() => setCount(count + 1)}
+            label={`Clicked ${count} times`}
+            isDisabled={false}
+          />
+        </div>
+
+        <div className="mt-4">
+          <Button
+            action={() => alert("Secondary")}
+            label="Secondary Button"
+            isDisabled={false}
+            type={ButtonType.Secondary}
+          />
+        </div>
+
+        <div className="mt-4">
+          <Button
+            action={() => alert("Accent")}
+            label="Accent Button"
+            isDisabled={false}
+            type={ButtonType.Accent}
+          />
+        </div>
+
+        <div className="mt-4">
+          <Button
+            action={() => alert("Warning")}
+            label="Warning Button"
+            isDisabled={false}
+            type={ButtonType.Warning}
+          />
+        </div>
+
+        <div className="mt-4">
+          <Button
+            action={() => alert("Error")}
+            label="Error Button"
+            isDisabled={false}
+            type={ButtonType.Error}
+          />
+        </div>
+
+        <div className="mt-4">
+          <Button
+            action={() => alert("disabled")}
+            label="Disabled Button"
+            isDisabled={false}
+            type={ButtonType.Disabled}
+          />
+        </div>
+
+        <p className="mt-6 text-disabled dark:text-disabled-dark">
+          This is a disabled text example with the disabled color.
+        </p>
+
+        <div className="mt-8 p-4 bg-secondary dark:bg-secondary-dark rounded-lg">
+          <p className="text-text dark:text-text-dark">
+            This section has a background that changes with the theme.
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }
 
