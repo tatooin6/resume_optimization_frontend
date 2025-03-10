@@ -1,9 +1,11 @@
+import { IconType } from "react-icons";
+
 interface ButtonProps {
   action: () => void;
   label: string;
   alternativeLabel?: string;
   isDisabled?: boolean;
-  icon?: string; // TODO: develop
+  icon?: IconType;
   type?: ButtonType;
 }
 
@@ -20,6 +22,7 @@ const Button = ({
   action,
   label,
   isDisabled = false,
+  icon: IconComponent,
   type = ButtonType.Primary,
 }: ButtonProps) => {
   const buttonType: Record<ButtonType, string> = {
@@ -34,13 +37,17 @@ const Button = ({
     [ButtonType.Disabled]:
       "bg-disabled dark:bg-disabled-dark text-gray-100 dark:text-primary-dark",
   };
+  const buttonStyles = isDisabled
+    ? buttonType[ButtonType.Disabled]
+    : `${buttonType[type]} cursor-pointer`;
   return (
     <button
-      className={`px-4 py-2 rounded font-mono ${buttonType[type]}`}
+      className={`px-4 py-2 rounded font-mono flex items-center space-x-2 ${buttonStyles}`}
       disabled={isDisabled}
       onClick={() => action()}
     >
-      count is {label}
+      {IconComponent && <IconComponent className="text-2xl" />}
+      <span>{label}</span>
     </button>
   );
 };
