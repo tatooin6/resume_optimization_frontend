@@ -15,7 +15,6 @@ export enum ButtonType {
   Accent,
   Warning,
   Error,
-  Disabled,
 }
 
 const Button = ({
@@ -34,11 +33,9 @@ const Button = ({
       "bg-accent text-primary-dark dark:bg-accent-dark dark:text-secondary-dark",
     [ButtonType.Warning]: "bg-warning dark:bg-warning-dark text-white",
     [ButtonType.Error]: "bg-error dark:bg-error-dark text-white",
-    [ButtonType.Disabled]:
-      "bg-disabled dark:bg-disabled-dark text-gray-100 dark:text-primary-dark",
   };
   const buttonStyles = isDisabled
-    ? buttonType[ButtonType.Disabled]
+    ? "bg-disabled dark:bg-disabled-dark text-gray-100 dark:text-primary-dark"
     : `${buttonType[type]} cursor-pointer`;
   return (
     <button
