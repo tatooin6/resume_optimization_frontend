@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router";
+import Home from "./pages/Home";
+import ComponentGallery from "./pages/ComponentGallery";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <h1 className="text-3xl font-thin text-blue-600">Welcome</h1>
-      <button onClick={() => setCount((count) => count + 1)}>
-        count is {count}
-      </button>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/gallery" element={<ComponentGallery />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
