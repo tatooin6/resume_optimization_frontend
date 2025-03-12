@@ -9,6 +9,8 @@ import {
   FaSignature,
 } from "react-icons/fa";
 import FileUpload from "../components/atoms/FileUpload";
+import Input from "../components/atoms/Input";
+import TextArea from "../components/atoms/TextArea";
 
 const ComponentGallery = () => {
   const [count, setCount] = useState(0);
@@ -21,7 +23,13 @@ const ComponentGallery = () => {
           <h1 className="text-3xl font-sans font-thin text-text dark:text-secondary">
             Welcome to the Dark Mode Demo
           </h1>
-          <div className="mb-6">
+          <div>
+            <TextArea />
+          </div>
+          <div>
+            <Input />
+          </div>
+          <div className="my-4">
             <FileUpload />
           </div>
           <p className="mt-4 text-text dark:text-text-dark">
