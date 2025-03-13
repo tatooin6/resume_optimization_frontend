@@ -9,6 +9,7 @@ import {
   FaSignature,
 } from "react-icons/fa";
 import FileUpload from "../components/atoms/FileUpload";
+import FormField, { InputType } from "../components/molecules/FormField";
 
 const ComponentGallery = () => {
   const [count, setCount] = useState(0);
@@ -21,85 +22,102 @@ const ComponentGallery = () => {
           <h1 className="text-3xl font-sans font-thin text-text dark:text-secondary">
             Welcome to the Dark Mode Demo
           </h1>
-          <div className="mb-6">
-            <FileUpload />
+
+          <div className="my-8 p-6 w-1/3 bg-gray-400 dark:bg-primary-dark rounded-lg">
+            <div>
+              <FormField
+                label="FormField TextArea"
+                placeholder="This is the placeholder"
+                type={InputType.TextArea}
+              />
+            </div>
+            <div>
+              <FormField
+                label="FormField Input"
+                placeholder="Insert here your text"
+                type={InputType.Input}
+              />
+            </div>
+            <div className="my-4">
+              <FileUpload />
+            </div>
+            <p className="mt-4 text-text dark:text-text-dark">
+              This is an example of text with the primary color in both light
+              and dark modes.
+            </p>
+            <p className="mt-4 text-accent dark:text-accent-dark">
+              This is an example of text with the accent color in both light and
+              dark modes.
+            </p>
           </div>
-          <p className="mt-4 text-text dark:text-text-dark">
-            This is an example of text with the primary color in both light and
-            dark modes.
+
+          <div className="mt-6">
+            <Button
+              action={() => setCount(count + 1)}
+              label={`Clicked ${count} times`}
+              isDisabled={false}
+            />
+          </div>
+
+          <div className="mt-4">
+            <Button
+              action={() => alert("Secondary")}
+              label="Secondary Button"
+              isDisabled={false}
+              icon={FaCannabis}
+              type={ButtonType.Secondary}
+            />
+          </div>
+
+          <div className="mt-4">
+            <Button
+              action={() => alert("Accent")}
+              label="Accent Button"
+              isDisabled={false}
+              icon={FaCarrot}
+              type={ButtonType.Accent}
+            />
+          </div>
+
+          <div className="mt-4">
+            <Button
+              action={() => alert("Warning")}
+              label="Warning Button"
+              isDisabled={false}
+              icon={FaCodepen}
+              type={ButtonType.Warning}
+            />
+          </div>
+
+          <div className="mt-4">
+            <Button
+              action={() => alert("Error")}
+              label="Error Button"
+              isDisabled={false}
+              icon={FaFistRaised}
+              type={ButtonType.Error}
+            />
+          </div>
+
+          <div className="mt-4">
+            <Button
+              action={() => alert("disabled")}
+              label="Disabled Button"
+              isDisabled={true}
+              icon={FaSignature}
+              type={ButtonType.Primary}
+            />
+          </div>
+
+          <p className="mt-6 text-disabled dark:text-disabled-dark">
+            This is a disabled text example with the disabled color.
           </p>
-          <p className="mt-4 text-accent dark:text-accent-dark">
-            This is an example of text with the accent color in both light and
-            dark modes.
-          </p>
-        </div>
 
-        <div className="mt-6">
-          <Button
-            action={() => setCount(count + 1)}
-            label={`Clicked ${count} times`}
-            isDisabled={false}
-          />
-        </div>
-
-        <div className="mt-4">
-          <Button
-            action={() => alert("Secondary")}
-            label="Secondary Button"
-            isDisabled={false}
-            icon={FaCannabis}
-            type={ButtonType.Secondary}
-          />
-        </div>
-
-        <div className="mt-4">
-          <Button
-            action={() => alert("Accent")}
-            label="Accent Button"
-            isDisabled={false}
-            icon={FaCarrot}
-            type={ButtonType.Accent}
-          />
-        </div>
-
-        <div className="mt-4">
-          <Button
-            action={() => alert("Warning")}
-            label="Warning Button"
-            isDisabled={false}
-            icon={FaCodepen}
-            type={ButtonType.Warning}
-          />
-        </div>
-
-        <div className="mt-4">
-          <Button
-            action={() => alert("Error")}
-            label="Error Button"
-            isDisabled={false}
-            icon={FaFistRaised}
-            type={ButtonType.Error}
-          />
-        </div>
-
-        <div className="mt-4">
-          <Button
-            action={() => alert("disabled")}
-            label="Disabled Button"
-            isDisabled={true}
-            icon={FaSignature}
-            type={ButtonType.Primary}
-          />
-        </div>
-
-        <p className="mt-6 text-disabled dark:text-disabled-dark">
-          This is a disabled text example with the disabled color.
-        </p>
-
-        <div className="mt-8 p-4 bg-gray-300 dark:bg-secondary-dark rounded-lg">
-          <p className="text-text dark:text-text-dark">
-            This section has a background that changes with the theme.
-          </p>
+          <div className="mt-8 p-4 bg-gray-300 dark:bg-secondary-dark rounded-lg">
+            <p className="text-text dark:text-text-dark">
+              This section has a background that changes with the theme.
+            </p>
+          </div>
         </div>
       </div>
     </div>
