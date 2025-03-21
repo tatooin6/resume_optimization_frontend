@@ -1,11 +1,17 @@
 import { useState } from "react";
+import { useResumeContext, ActionTypes } from "../../contexts/ResumeContext";
+
 const FileUpload = () => {
   const [fileName, setFileName] = useState("");
+  const { state, dispatch } = useResumeContext();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     const file = files ? files[0] : null;
-    setFileName(file ? file.name : "");
+    if (file) {
+      setFileName(file ? file.name : "");
+      dispatch({ type: ActionTypes.SET_SELECTED_FILE, payload: file });
+    }
   };
 
   return (
