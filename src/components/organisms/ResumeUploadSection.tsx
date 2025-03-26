@@ -7,10 +7,13 @@ import * as pdfjsLib from "pdfjs-dist";
 import Tesseract from "tesseract.js";
 
 import { useResumeContext, ActionTypes } from "../../contexts/ResumeContext";
+import { uploadResume, pollTask } from "../../services/OptimizationService";
 
 const ResumeUploadSection = () => {
   const { state, dispatch } = useResumeContext();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isOptimizing, setIsOptimizing] = useState(false);
+  const [taskId, setTaskId] = useState("");
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const processPdf = async (selectedFile: File | null) => {
@@ -60,6 +63,29 @@ const ResumeUploadSection = () => {
     }
   };
 
+  const handleUpload = async () => {
+    setIsOptimizing(true);
+
+    await uploadResume({
+      resume_md: state.outputText,
+      job_description: state.jobDescription,
+    })
+      .then((response) => {
+        console.log(response);
+        if (response && response.task_id) {
+          setTaskId(response.task_id);
+          pollTask(taskId, (result: string) =>
+            dispatch({ type: ActionTypes.SET_OUTPUT_TEXT, payload: result }),
+          );
+        } else {
+          console.log("No response available.");
+        }
+      })
+      .catch((err) => {
+        console.error("Error trying to upload resume.", err);
+      });
+  };
+
   return (
     <div>
       <canvas ref={canvasRef} style={{ display: "none" }} />
@@ -84,8 +110,8 @@ const ResumeUploadSection = () => {
       </div>
       <div className="mt-6">
         <Button
-          action={() => console.log("Optimize")}
-          label="Optimize"
+          action={handleUpload}
+          label={isOptimizing ? "Optimizing" : "Optimize"}
           isDisabled={
             state.outputText === "" ||
             state.jobDescription === "" ||
