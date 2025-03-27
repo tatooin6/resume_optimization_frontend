@@ -13,7 +13,6 @@ const ResumeUploadSection = () => {
   const { state, dispatch } = useResumeContext();
   const [isProcessing, setIsProcessing] = useState(false);
   const [isOptimizing, setIsOptimizing] = useState(false);
-  const [taskId, setTaskId] = useState("");
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const processPdf = async (selectedFile: File | null) => {
@@ -66,24 +65,23 @@ const ResumeUploadSection = () => {
   const handleUpload = async () => {
     setIsOptimizing(true);
 
-    await uploadResume({
-      resume_md: state.outputText,
-      job_description: state.jobDescription,
-    })
-      .then((response) => {
-        console.log(response);
-        if (response && response.task_id) {
-          setTaskId(response.task_id);
-          pollTask(taskId, (result: string) =>
-            dispatch({ type: ActionTypes.SET_OUTPUT_TEXT, payload: result }),
-          );
-        } else {
-          console.log("No response available.");
-        }
-      })
-      .catch((err) => {
-        console.error("Error trying to upload resume.", err);
+    try {
+      const response = await uploadResume({
+        resume_md: state.outputText,
+        job_description: state.jobDescription,
       });
+      if (response && response.task_id) {
+        pollTask(response.task_id, (result: string) =>
+          dispatch({ type: ActionTypes.SET_OUTPUT_TEXT, payload: result }),
+        );
+      } else {
+        console.log("No response available.");
+      }
+    } catch (err) {
+      console.error("Error trying to upload resume.", err);
+    } finally {
+      setIsOptimizing(false);
+    }
   };
 
   return (

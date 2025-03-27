@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = import.meta.env.VITE_API_URL;
 
 interface uploadResumeParams {
   resume_md: string;
@@ -42,8 +42,10 @@ const pollTask = async (taskId: string, callback: (taskId: string) => void) => {
   let status = "STARTED";
   let attempts = 0;
   const maxAttempts = 30;
-
-  while (status === "STARTED" && attempts < maxAttempts) {
+  while (
+    (status === "STARTED" || status === "PENDING") &&
+    attempts < maxAttempts
+  ) {
     try {
       const taskStatus = await getTaskStatus(taskId);
 
@@ -56,6 +58,7 @@ const pollTask = async (taskId: string, callback: (taskId: string) => void) => {
 
       status = taskStatus.status;
       if (status === "SUCCESS") {
+        callback(taskStatus.result);
         break;
       } else if (status === "FAILED") {
         callback("Task failed");
