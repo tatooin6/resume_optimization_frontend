@@ -5,11 +5,12 @@ const MonacoDiffEditorContainerID = "MonacoDiffEditorContainer";
 interface MonacoEditorTypes {
   id?: string;
   language?: string;
-  onKeyDown?: Function;
-  onKeyUp?: Function;
+  // onKeyDown?: Function;
+  // onKeyUp?: Function;
   saveText?: Function;
   tabSize?: number;
   text: string;
+  result: string;
   theme?: string;
 }
 
@@ -19,37 +20,58 @@ export const MonacoDiffEditor: React.FC<MonacoEditorTypes> = ({
   saveText,
   tabSize = 4,
   text,
+  result,
   theme = "vs-dark",
 }) => {
   const divEl = useRef<HTMLDivElement>(null);
-  let diffEditor: monaco.editor.IStandaloneDiffEditor;
+  const diffEditorRef = useRef<monaco.editor.IStandaloneDiffEditor | null>(
+    null,
+  );
+
   useEffect(() => {
     if (divEl.current) {
-      const originalModel = monaco.editor.createModel(
-        text, // "heLLo world!",
-        "markdown",
-      );
-      const modifiedModel = monaco.editor.createModel(
-        "hello Tato!",
-        "markdown",
-      );
-      diffEditor = monaco.editor.createDiffEditor(divEl.current, {
+      const originalModel = monaco.editor.createModel(text, language);
+      const modifiedModel = monaco.editor.createModel(result, language);
+      diffEditorRef.current = monaco.editor.createDiffEditor(divEl.current, {
         originalEditable: true, // left panel
         readOnly: true, // right panel
         autoClosingOvertype: "auto",
         wordWrap: "on",
         fontSize: 16,
-        theme: "vs-dark",
+        lineHeight: 24,
+        minimap: {
+          enabled: false,
+        },
+        theme,
       });
-      diffEditor.setModel({
+
+      diffEditorRef.current.setModel({
         original: originalModel,
         modified: modifiedModel,
       });
     }
     return () => {
-      diffEditor.dispose();
+      diffEditorRef.current?.dispose();
     };
   }, []);
+
+  useEffect(() => {
+    if (diffEditorRef.current) {
+      const modifiedModel = diffEditorRef.current.getModel()?.modified;
+      console.log(result ? result : "default");
+      if (modifiedModel)
+        modifiedModel.setValue(result ? result : "default right text");
+    }
+  }, [result]);
+
+  useEffect(() => {
+    if (diffEditorRef.current) {
+      const originalModel = diffEditorRef.current.getModel()?.original;
+      if (originalModel)
+        originalModel.setValue(text ? text : "default left text");
+    }
+  }, [text]);
+
   return (
     <div
       id={id}
