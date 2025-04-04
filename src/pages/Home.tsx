@@ -29,5 +29,4 @@ const Home = () => {
     </div>
   );
 };
-// <span>{state.outputText}</span>
 export default Home;

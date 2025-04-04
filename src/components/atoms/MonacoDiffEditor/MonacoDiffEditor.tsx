@@ -5,10 +5,6 @@ const MonacoDiffEditorContainerID = "MonacoDiffEditorContainer";
 interface MonacoEditorTypes {
   id?: string;
   language?: string;
-  // onKeyDown?: Function;
-  // onKeyUp?: Function;
-  saveText?: Function;
-  tabSize?: number;
   text: string;
   result: string;
   theme?: string;
@@ -17,8 +13,6 @@ interface MonacoEditorTypes {
 export const MonacoDiffEditor: React.FC<MonacoEditorTypes> = ({
   id = MonacoDiffEditorContainerID,
   language = "markdown",
-  saveText,
-  tabSize = 4,
   text,
   result,
   theme = "vs-dark",
