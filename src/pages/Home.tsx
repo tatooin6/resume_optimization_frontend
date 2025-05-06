@@ -20,10 +20,7 @@ const Home = () => {
           <ResumeUploadSection />
         </div>
         <div className="w-full p-5 h-[600px]">
-          <MonacoDiffEditor
-            text={state.markdownText}
-            result={state.outputText}
-          />
+          <MonacoDiffEditor text={state.outputText} />
         </div>
       </div>
     </div>
