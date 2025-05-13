@@ -1,3 +1,4 @@
+import { MonacoDiffEditor } from "../components/atoms/MonacoDiffEditor/MonacoDiffEditor";
 import { ThemeSwitcher } from "../components/atoms/ThemeSwitcher";
 import ResumeUploadSection from "../components/organisms/ResumeUploadSection";
 import { useResumeContext } from "../contexts/ResumeContext";
@@ -18,12 +19,14 @@ const Home = () => {
         <div className="flex flex-col justify-center items-start h-fit my-8 p-6 md:w-1/3 md-full bg-gray-400 dark:bg-primary-dark rounded-lg">
           <ResumeUploadSection />
         </div>
-        <div className="bg-accent md:w-2/3 w-full flex-grow flex items-center justify-center h-full">
-          <span>{state.outputText}</span>
+        <div className="w-full p-5 h-[600px]">
+        <MonacoDiffEditor
+            text={state.markdownText}
+            result={state.outputText}
+          />
         </div>
       </div>
     </div>
   );
 };
-
 export default Home;
