@@ -54,7 +54,7 @@ const ResumeUploadSection = () => {
           }
         }
       }
-      dispatch({ type: ActionTypes.SET_OUTPUT_TEXT, payload: extractedText });
+      dispatch({ type: ActionTypes.SET_MARKDOWN_TEXT, payload: extractedText });
     } catch (error) {
       console.error(`Found error on processing pdf: ${error}`);
     } finally {
@@ -67,7 +67,7 @@ const ResumeUploadSection = () => {
 
     try {
       const response = await uploadResume({
-        resume_md: state.outputText,
+        resume_md: state.markdownText,
         job_description: state.jobDescription,
       });
       if (response && response.task_id) {
@@ -111,7 +111,7 @@ const ResumeUploadSection = () => {
           action={handleUpload}
           label={isOptimizing ? "Optimizing" : "Optimize"}
           isDisabled={
-            state.outputText === "" ||
+            state.markdownText === "" ||
             state.jobDescription === "" ||
             state.selectedFile === null
           }
