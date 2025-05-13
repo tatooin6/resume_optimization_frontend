@@ -111,7 +111,9 @@ const ResumeUploadSection = () => {
           action={handleUpload}
           label={isOptimizing ? "Optimizing" : "Optimize"}
           isDisabled={
-            state.jobDescription === "" || state.selectedFile === null
+            state.markdownText === "" ||
+            state.jobDescription === "" ||
+            state.selectedFile === null
           }
           type={ButtonType.Secondary}
         />

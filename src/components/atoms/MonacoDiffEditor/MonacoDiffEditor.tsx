@@ -10,6 +10,26 @@ interface MonacoEditorTypes {
   theme?: string;
 }
 
+/**
+ * MonacoDiffEditor
+ *
+ * Renders a side-by-side diff editor using Monaco.
+ *
+ * TODO(antonio pantoja): 
+ *   There is a known bug in Vite apps where Monaco cannot locate its web workers,
+ *   resulting in console errors like:
+ *     • "Uncaught (in promise) Canceled: Canceled"
+ *
+ *   This is an upstream issue in monaco-editor:
+ *   https://github.com/microsoft/monaco-editor/issues/4702
+ *   https://github.com/y-scope/yscope-log-viewer/pull/159
+ *   https://github.com/microsoft/monaco-editor/issues/4859
+ *   https://github.com/cardstack/boxel/commit/7cacc9e15020696b89e07e4badd4f6a124975109
+ *
+ *   For now we ship with the built-in fallback and ignore these console errors.
+ *   Revisit this comment once the upstream fix is published or a proper
+ *   worker configuration is possible in Vite.
+ */
 export const MonacoDiffEditor: React.FC<MonacoEditorTypes> = ({
   id = MonacoDiffEditorContainerID,
   language = "markdown",
@@ -18,27 +38,24 @@ export const MonacoDiffEditor: React.FC<MonacoEditorTypes> = ({
   theme = "vs-dark",
 }) => {
   const divEl = useRef<HTMLDivElement>(null);
-  const diffEditorRef = useRef<monaco.editor.IStandaloneDiffEditor | null>(
+  let diffEditorRef = useRef<monaco.editor.IStandaloneDiffEditor | null>(
     null,
   );
 
   useEffect(() => {
     if (divEl.current) {
-      const originalModel = monaco.editor.createModel(text, language);
-      const modifiedModel = monaco.editor.createModel(result, language);
+      const originalModel = monaco.editor.createModel(text,language,);
+      const modifiedModel = monaco.editor.createModel(result,language,);
+      
       diffEditorRef.current = monaco.editor.createDiffEditor(divEl.current, {
-        originalEditable: true, // left panel
-        readOnly: true, // right panel
+        originalEditable: true,
+        readOnly: true,
         autoClosingOvertype: "auto",
         wordWrap: "on",
         fontSize: 16,
-        lineHeight: 24,
-        minimap: {
-          enabled: false,
-        },
+        minimap: {enabled: false},
         theme,
       });
-
       diffEditorRef.current.setModel({
         original: originalModel,
         modified: modifiedModel,
@@ -49,20 +66,25 @@ export const MonacoDiffEditor: React.FC<MonacoEditorTypes> = ({
     };
   }, []);
 
+  // Update right-hand side when `result` changes
   useEffect(() => {
-    if (diffEditorRef.current) {
-      const modifiedModel = diffEditorRef.current.getModel()?.modified;
-      console.log(result ? result : "default");
-      if (modifiedModel)
-        modifiedModel.setValue(result ? result : "default right text");
-    }
-  }, [result]);
+      if (diffEditorRef.current) {
+        const modifiedModel = diffEditorRef.current.getModel()?.modified;
+        const textToSet = result ?? "default right text";
+        if (modifiedModel)
+          modifiedModel.setValue(textToSet); // <== Line that introduced bug
+      }
 
+  }, [result]);
+  
+   // Update left-hand side when `text` changes
   useEffect(() => {
     if (diffEditorRef.current) {
       const originalModel = diffEditorRef.current.getModel()?.original;
-      if (originalModel)
-        originalModel.setValue(text ? text : "default left text");
+      const textToSet = text ?? "default left text";
+      if (originalModel) {
+        originalModel.setValue(textToSet);
+      }
     }
   }, [text]);
 
